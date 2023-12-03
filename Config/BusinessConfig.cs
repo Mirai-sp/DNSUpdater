@@ -20,6 +20,7 @@
         public static string UPDATING = "Updating";
         public static string PROPERTY_RETRY = "Retry";
         public static string PROPERTY_DELAY = "Delay";
+        public static string PROPERTY_GETURL = "GetUrl";
 
         public static string FAILED(string err) { return $"Failed: {err}"; }
         public static string NO_CHANGED(string ip) { return $"Update Not Necessary to: {ip}"; }

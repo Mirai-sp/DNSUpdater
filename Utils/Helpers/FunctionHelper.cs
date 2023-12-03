@@ -60,9 +60,14 @@ namespace DNSUpdater.Utils.Helpers
         public static void CheckRequiredProperties(List<PropertiesDTO> propertiesList, List<string> requiredField, string serviceName)
         {
             //            var result = propertiesList.Where(p => !requiredField.Any(p2 => p2.Equals(p.Name)));
-            var result = requiredField.Where(p => !propertiesList.Any(p2 => p2.Name.ToLower().Equals(p.ToLower())));
+            var result = requiredField.Where(p => !propertiesList.Any(p2 => p2.Name.ToLower().Equals(p.ToLower()) && !string.IsNullOrEmpty(p2.Value)));
             if (result.Count() > 0)
                 throw new ProjectException(DictionaryError.ERROR_REQUIRED_PROPERTIES(serviceName, string.Join(", ", result)));
+        }
+
+        public static string GetPropertyeValueByName(List<PropertiesDTO> propertiesList, string propertyName)
+        {
+            return propertiesList.Where(search => search.Name.ToLower().Equals(propertyName.ToLower())).DefaultIfEmpty().Select(sel => sel.Value).FirstOrDefault();
         }
 
     }

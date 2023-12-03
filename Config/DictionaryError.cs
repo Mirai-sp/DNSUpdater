@@ -10,5 +10,8 @@
         public static string ERROR_DUPLICATED_PROPERTIES(string serviceName, string duplicatedProperties) { return $"Duplicated propertie was found and this is not allowed, please fix it and reload configuration.\r\n\r\nService Name:{serviceName}\r\nDuplicated Properties:{duplicatedProperties}"; }
         public static string ERROR_REQUIRED_PROPERTIES(string serviceName, string requiredPropertyes) { return $"Propertyes({requiredPropertyes}) is required, please fix it and reload configuration.\r\n\r\nService Name:{serviceName}"; }
         public static string ERROR_UPDATER_CLASS_NOT_FOUND(string className) { return $"Updater Class({className}) not found."; }
+        public static string ERROR_UNABLE_TO_CONVERT_VALUE(string value, string desireType) { return $"Unable to convert {value} to {desireType}."; }
+        public static string ERROR_UNABLE_TO_UPDATE = "Unable to update.";
+        public static string ERROR_UNABLE_TO_REACH_THE_REQUESTED_URL(string requestedURL) { return $"Unable to reach the requested url {requestedURL}."; }
     }
 }

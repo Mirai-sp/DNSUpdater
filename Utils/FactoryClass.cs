@@ -1,4 +1,5 @@
-﻿using DNSUpdater.Services.Base;
+﻿using DNSUpdater.Services;
+using DNSUpdater.Services.Base;
 using DNSUpdater.Services.Updater;
 
 namespace DNSUpdater.Utils
@@ -6,6 +7,7 @@ namespace DNSUpdater.Utils
     public static class FactoryClass
     {
         private static UpdaterDDNSBase dynDNS6;
+        private static HttpService httpClient;
 
         public static UpdaterDDNSBase GetUpdaterDDNSDynDNS6()
         {
@@ -14,6 +16,15 @@ namespace DNSUpdater.Utils
                 dynDNS6 = new UpdaterDDNSDyndns6();
             }
             return dynDNS6;
+        }
+
+        public static HttpService GetHTTPClient()
+        {
+            if (httpClient == null)
+            {
+                httpClient = new HttpService();
+            }
+            return httpClient;
         }
     }
 }
