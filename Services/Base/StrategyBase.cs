@@ -9,9 +9,9 @@ namespace DNSUpdater.Services.Base
 {
     public abstract class StrategyBase
     {
-        public abstract StrategyResponseDTO Execute(ConfigModelDTO configModel, List<PropertiesDTO> properties);
+        public abstract Task<StrategyResponseDTO> Execute(ConfigModelDTO configModel, List<PropertiesDTO> properties, int retry, int delay);
 
-        public static StrategyResponseDTO ExecuteByStrategyName(ConfigModelDTO configModel, string strategyName, List<PropertiesDTO> properties)
+        public async static Task<StrategyResponseDTO> ExecuteByStrategyName(ConfigModelDTO configModel, string strategyName, List<PropertiesDTO> properties)
         {
             Type strategyType = Type.GetType($"DNSUpdater.Services.Strategy.{strategyName}");
             if (strategyType == null)
@@ -22,7 +22,6 @@ namespace DNSUpdater.Services.Base
                 string retryParam = string.Empty;
                 string delayParam = string.Empty;
 
-                int retryTime = 1;
                 StrategyResponseDTO response = new StrategyResponseDTO();
                 try
                 {
@@ -44,21 +43,19 @@ namespace DNSUpdater.Services.Base
                     throw new ProjectException(DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(delayParam, "Int"));
                 }
 
-                while (retryTime <= int.Parse(retryParam))
+                /* while (retryTime <= int.Parse(retryParam))
+                 {*/
+                try
                 {
-                    try
-                    {
-                        response = strategyInstange.Execute(configModel, properties);
-                        if (response.Status.Equals(Enums.StrategyResponseStatusEnum.Success))
-                            break;
-                    }
-                    catch (Exception ex)
-                    {
-                        response = new StrategyResponseDTO(StrategyResponseStatusEnum.Error, ex.GetBaseException().Message);
-                    }
-                    retryTime++;
-                    Thread.Sleep(int.Parse(delayParam));
+                    response = await strategyInstange.Execute(configModel, properties, int.Parse(retryParam), int.Parse(delayParam)).ConfigureAwait(false);
                 }
+                catch (Exception ex)
+                {
+                    response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, ex.GetBaseException().Message)).ConfigureAwait(false);
+                }
+                //retryTime++;
+                // Thread.Sleep(int.Parse(delayParam));
+                //}*/
                 return response;
             }
         }

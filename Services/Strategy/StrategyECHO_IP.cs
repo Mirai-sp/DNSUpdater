@@ -10,7 +10,7 @@ namespace DNSUpdater.Services.Strategy
     public class StrategyECHO_IP : StrategyBase
     {
         private HttpService httpClient = FactoryClass.GetHTTPClient();
-        public override StrategyResponseDTO Execute(ConfigModelDTO configModel, List<PropertiesDTO> properties)
+        public async override Task<StrategyResponseDTO> Execute(ConfigModelDTO configModel, List<PropertiesDTO> properties, int retry, int delay)
         {
             try
             {
@@ -18,13 +18,21 @@ namespace DNSUpdater.Services.Strategy
             }
             catch (Exception e)
             {
-                return new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message);
+                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message));
             }
 
-            string ip = httpClient.GetAsync(FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL)); //GetAwaiter().GetResult();
+            try
+            {
+                string ip = await httpClient.GetAsync(FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL), retry, delay).ConfigureAwait(false); //GetAwaiter().GetResult();
+                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, ip)).ConfigureAwait(false);
+            }
+            catch
+            {
+                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, "Error")).ConfigureAwait(false);
+            }
 
 
-            return new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, ip);
+
         }
     }
 }

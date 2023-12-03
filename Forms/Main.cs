@@ -94,7 +94,7 @@ namespace DNSUpdater
             btnStartStop.Text = BusinessConfig.ENABLED;
         }
 
-        private void ScheduledTaskRun(object source, EventArgs e)
+        private async void ScheduledTaskRun(object source, EventArgs e)
         {
             var timer = (Timer)source;
 
@@ -104,7 +104,7 @@ namespace DNSUpdater
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
             FunctionHelper.AutoSizeColumnList(servicesList);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
-            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).Message;
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(false).GetAwaiter().GetResult().Message;
             //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
