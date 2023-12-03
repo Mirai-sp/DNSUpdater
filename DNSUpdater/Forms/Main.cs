@@ -1,5 +1,4 @@
 using DNSUpdater.Config;
-using DNSUpdater.Models.DTO;
 using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Utils.Exceptions;
 using DNSUpdater.Utils.Helpers;
@@ -10,15 +9,15 @@ namespace DNSUpdater
 {
     public partial class Main : Form
     {
-        private List<ScheduledJobsDTO> configuration;
-        private ScheduledJobsDTO? selectedScheduledItem;
+        private List<ConfigModelDTO> configuration;
+        private ConfigModelDTO? selectedScheduledItem;
         public Main()
         {
             InitializeComponent();
         }
 
         #region PrivateMethods
-        private List<ScheduledJobsDTO> LoadConfiguration()
+        private List<ConfigModelDTO> LoadConfiguration()
         {
             string configFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config.json");
             if (!File.Exists(configFilePath))
@@ -32,26 +31,17 @@ namespace DNSUpdater
             try
             {
                 List<ConfigModelDTO> configuration = JsonConvert.DeserializeObject<List<ConfigModelDTO>>(configJSON);
-                List<ScheduledJobsDTO> scheduledJobsList = new List<ScheduledJobsDTO>();
-                configuration.ForEach(elem =>
+                configuration.ForEach(config =>
                 {
-                    ScheduledJobsDTO scheduledItem = new ScheduledJobsDTO()
+                    config.Timer = new Timer()
                     {
-                        ServiceName = elem.ServiceName,
-                        Enabled = elem.Enabled,
-                        Interval = elem.Interval,
-                        Properties = elem.Properties,
-                        Timer = new Timer()
-                        {
-                            Tag = elem,
-                            Enabled = elem.Enabled.ToString().ToLower().Equals("true"),
-                            Interval = elem.Interval
-                        }
+                        Tag = config,
+                        Enabled = config.Enabled,
+                        Interval = config.Interval
                     };
-                    scheduledItem.Timer.Tick += new EventHandler(ScheduledTaskRun);
-                    scheduledJobsList.Add(scheduledItem);
+                    config.Timer.Tick += new EventHandler(ScheduledTaskRun);
                 });
-                return scheduledJobsList;
+                return configuration;
             }
             catch
             {
@@ -66,9 +56,12 @@ namespace DNSUpdater
             var timer = (Timer)source;
 
             ConfigModelDTO configModel = (ConfigModelDTO)timer.Tag;
-            ListViewItem Item = servicesList.Items.Find(configModel.ServiceName, false).FirstOrDefault();
+            ListViewItem item = servicesList.Items.Cast<ListViewItem>().Where(elem => elem.Tag.Equals(configModel.Key)).FirstOrDefault();
+            item.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.LAST_UPDATED)).FirstOrDefault().Index].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
+            item.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.LAST_UPDATED)).FirstOrDefault().Index].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
+            // Item.SubItems[BusinessConfig.LAST_UPDATED].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
 
-            MessageBox.Show($"Teste Service Name is {configModel.ServiceName}");
+            //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
         /*private void CheckSelectedItem()
@@ -86,7 +79,7 @@ namespace DNSUpdater
                 selectedScheduledItem = null;
             else
             {
-                ScheduledJobsDTO scheduledJob = configuration.Where(search => search.ServiceName.Equals(servicesList.FocusedItem.Text)).FirstOrDefault();
+                ConfigModelDTO scheduledJob = configuration.Where(search => search.ServiceName.Equals(servicesList.FocusedItem.Text)).FirstOrDefault();
                 if (scheduledJob == null)
                     throw new ProjectException(DictionaryError.ERROR_NOT_WAS_POSSIBLE_LOAD_SELECTED_SCHEDULED_JOB(servicesList.FocusedItem.Text));
                 selectedScheduledItem = scheduledJob;
@@ -100,12 +93,12 @@ namespace DNSUpdater
 
             btnStartStop.Enabled = selectedScheduledItem != null;
             btnStartStop.Text = (selectedScheduledItem == null ? "Invalid Selection" : (selectedScheduledItem.Timer.Enabled ? BusinessConfig.DISABLE : BusinessConfig.ENABLE));
-            servicesList.FocusedItem.SubItems[1].Text = (btnStartStop.Text.Equals(BusinessConfig.ENABLE) ? BusinessConfig.FALSE : BusinessConfig.TRUE);
+            servicesList.FocusedItem.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.ENABLED)).FirstOrDefault().Index].Text = (btnStartStop.Text.Equals(BusinessConfig.ENABLE) ? BusinessConfig.FALSE : BusinessConfig.TRUE);
         }
 
-        private void LoadListView(List<ScheduledJobsDTO> configuration)
+        private void LoadListView(List<ConfigModelDTO> configuration)
         {
-            List<string> columns = new List<string>() { "Service Name", "Enabled", "Interval", "Last Updated", "Next Update" };
+            List<string> columns = new List<string>() { BusinessConfig.SERVICE_NAME, BusinessConfig.ENABLED, BusinessConfig.INTERVAL, BusinessConfig.LAST_UPDATED, BusinessConfig.NEXT_UPDATE };
             columns.ForEach(elem =>
             {
                 ColumnHeader ch = new ColumnHeader();
@@ -119,11 +112,12 @@ namespace DNSUpdater
             configuration.ForEach(config =>
             {
                 item = new ListViewItem();
+                item.Tag = config.Key;
                 item.Text = config.ServiceName;
                 item.SubItems.Add(config.Enabled ? BusinessConfig.TRUE : BusinessConfig.FALSE);
                 item.SubItems.Add(config.Interval.ToString());
                 item.SubItems.Add(BusinessConfig.NOT_RUNED_YET);
-                item.SubItems.Add(!config.Enabled ? BusinessConfig.NOT_SCHEDULED : DateTime.Now.AddMilliseconds(config.Interval).ToString("dd/MM/yyyy HH:mm:ss"));
+                item.SubItems.Add(!config.Enabled ? BusinessConfig.NOT_SCHEDULED : DateTime.Now.AddMilliseconds(config.Interval).ToString(BusinessConfig.DATETIME_OUTPUT));
 
                 servicesList.Items.Add(item);
             });
