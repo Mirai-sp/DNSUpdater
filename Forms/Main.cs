@@ -1,5 +1,6 @@
 using DNSUpdater.Config;
 using DNSUpdater.Models.DTO.Config;
+using DNSUpdater.Services.Base;
 using DNSUpdater.Utils.Exceptions;
 using DNSUpdater.Utils.Helpers;
 using Newtonsoft.Json;
@@ -109,7 +110,9 @@ namespace DNSUpdater
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
             FunctionHelper.AutoSizeColumnList(servicesList);
-            MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item);
+            //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
         private void DefineSelectedScheduledJob()
@@ -134,13 +137,14 @@ namespace DNSUpdater
             {
                 servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = BusinessConfig.NOT_RUNED_YET;
                 servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = !selectedScheduledItem.Timer.Enabled ? BusinessConfig.NOT_SCHEDULED : DateTime.Now.AddMilliseconds(selectedScheduledItem.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
+                servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.PENDING;
             }
             FunctionHelper.AutoSizeColumnList(servicesList);
         }
 
         private void LoadListView(List<ConfigModelDTO> configuration)
         {
-            List<string> columns = new List<string>() { BusinessConfig.SERVICE_NAME, BusinessConfig.ENABLED, BusinessConfig.INTERVAL, BusinessConfig.LAST_UPDATED, BusinessConfig.NEXT_UPDATE };
+            List<string> columns = new List<string>() { BusinessConfig.SERVICE_NAME, BusinessConfig.ENABLED, BusinessConfig.INTERVAL, BusinessConfig.LAST_UPDATED, BusinessConfig.NEXT_UPDATE, BusinessConfig.STATUS };
             columns.ForEach(elem =>
             {
                 ColumnHeader ch = new ColumnHeader();
@@ -159,6 +163,7 @@ namespace DNSUpdater
                 item.SubItems.Add(config.Interval.ToString());
                 item.SubItems.Add(BusinessConfig.NOT_RUNED_YET);
                 item.SubItems.Add(!config.Enabled ? BusinessConfig.NOT_SCHEDULED : DateTime.Now.AddMilliseconds(config.Interval).ToString(BusinessConfig.DATETIME_OUTPUT));
+                item.SubItems.Add(BusinessConfig.PENDING);
 
                 servicesList.Items.Add(item);
             });
