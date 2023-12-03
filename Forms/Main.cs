@@ -43,6 +43,8 @@ namespace DNSUpdater
             configReader.ForEach(config =>
             {
                 FunctionHelper.CheckDuplicatesPropertyes(config.Properties, config.ServiceName);
+                FunctionHelper.CheckRequiredProperties(config.Properties, new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB }, config.ServiceName);
+                FunctionHelper.CheckPropertyeIsValid(FunctionHelper.GetPropertyeByName(config.Properties, BusinessConfig.PROPERTY_HTTP_VERB), new List<string>() { BusinessConfig.HTTP_GET, BusinessConfig.HTTP_POST, BusinessConfig.HTTP_PUT, BusinessConfig.HTTP_DELETE, BusinessConfig.HTTP_PATCH }, config.ServiceName);
                 config.WorkStrategy.ForEach(workStrategy =>
                 {
                     FunctionHelper.CheckDuplicatesPropertyes(workStrategy.Properties, config.ServiceName);
@@ -139,13 +141,16 @@ namespace DNSUpdater
 
         private void UpdateStatusListView()
         {
-            configuration.ForEach(configModel =>
+            if (configuration != null)
             {
-                ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
-                FunctionHelper.AutoSizeColumnList(servicesList);
-                item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
-                item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = configModel.Response.Message;
-            });
+                configuration.ForEach(configModel =>
+                {
+                    ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
+                    FunctionHelper.AutoSizeColumnList(servicesList);
+                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
+                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = configModel.Response.Message;
+                });
+            }
 
         }
 

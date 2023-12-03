@@ -2,11 +2,13 @@
 using DNSUpdater.Enums;
 using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
+using DNSUpdater.Utils;
 
 namespace DNSUpdater.Services.Updater
 {
     public class UpdaterDDNSDyndns6 : UpdaterDDNSBase
     {
+        private HttpService httpService = FactoryClass.GetHTTPClient();
         public override async Task UpdateDNS(ConfigModelDTO configModel, ListViewItem listViewItem)
         {
             configModel.Response.Status = StrategyResponseStatusEnum.Error;

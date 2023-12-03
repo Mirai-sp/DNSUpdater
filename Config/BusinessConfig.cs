@@ -21,6 +21,13 @@
         public static string PROPERTY_RETRY = "Retry";
         public static string PROPERTY_DELAY = "Delay";
         public static string PROPERTY_GETURL = "GetUrl";
+        public static string PROPERTY_SERVICEURL = "ServiceUrl";
+        public static string PROPERTY_HTTP_VERB = "HttpVerb";
+        public const string HTTP_GET = "Get";
+        public const string HTTP_POST = "Post";
+        public const string HTTP_DELETE = "Delete";
+        public const string HTTP_PUT = "Put";
+        public const string HTTP_PATCH = "PATCH";
 
         public static string FAILED(string err) { return $"Failed: {err}"; }
         public static string NO_CHANGED(string ip) { return $"Update Not Necessary to: {ip}"; }
