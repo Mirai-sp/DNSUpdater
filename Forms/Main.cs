@@ -98,15 +98,16 @@ namespace DNSUpdater
         {
             var timer = (Timer)source;
             ConfigModelDTO configModel = (ConfigModelDTO)timer.Tag;
-            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(false);
+            configModel.Timer.Enabled = false;
 
             ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
 
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
-            FunctionHelper.AutoSizeColumnList(servicesList);
-            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
-            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = configModel.Response.Message;
+
+            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(false);
+
+            configModel.Timer.Enabled = true;
         }
 
         private void DefineSelectedScheduledJob()
@@ -134,6 +135,18 @@ namespace DNSUpdater
                 servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.PENDING;
             }
             FunctionHelper.AutoSizeColumnList(servicesList);
+        }
+
+        private void UpdateStatusListView()
+        {
+            configuration.ForEach(configModel =>
+            {
+                ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
+                FunctionHelper.AutoSizeColumnList(servicesList);
+                item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
+                item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = configModel.Response.Message;
+            });
+
         }
 
         private void LoadListView(List<ConfigModelDTO> configuration)
@@ -175,6 +188,7 @@ namespace DNSUpdater
         private void timer_Tick(object sender, EventArgs e)
         {
             lblNow.Text = $"Now Is {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}";
+            UpdateStatusListView();
         }
 
         private void btnStartStop_Click(object sender, EventArgs e)

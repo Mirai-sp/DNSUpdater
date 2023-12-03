@@ -17,7 +17,7 @@ namespace DNSUpdater.Services.Base
             else
             {
                 UpdaterDDNSBase serviceInstance = (UpdaterDDNSBase)Activator.CreateInstance(serviceType);
-                await Task.Run(() => serviceInstance.UpdateDNS(configModel, listViewItem)).ConfigureAwait(false);
+                await Task.Run(() => serviceInstance.UpdateDNS(configModel, listViewItem)).ConfigureAwait(true);
             }
         }
     }

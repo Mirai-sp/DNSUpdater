@@ -23,12 +23,14 @@ namespace DNSUpdater.Services.Base
                 StrategyBase strategyInstange = (StrategyBase)Activator.CreateInstance(strategyType);
                 string retryParam = string.Empty;
                 string delayParam = string.Empty;
+                string urlParam = string.Empty;
                 int retryCount = 1;
 
                 StrategyResponseDTO response = new StrategyResponseDTO();
                 try
                 {
                     retryParam = FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_RETRY);
+                    urlParam = FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL);
                     int.Parse(retryParam);
                 }
                 catch (Exception ex)
@@ -58,18 +60,11 @@ namespace DNSUpdater.Services.Base
                     }
                     catch (Exception ex)
                     {
+                        configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, strategyName, urlParam, ex.GetBaseException().Message))).ConfigureAwait(false);
                         retryCount++;
-                        configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, "teste", ex.GetBaseException().Message))).ConfigureAwait(false);
                         await Task.Delay(int.Parse(delayParam)).ConfigureAwait(false);
-                        //var task = Task.Factory.StartNew(() => Thread.Sleep(new TimeSpan(0, 0, 2)));
-                        //Task.WaitAll(new[] { task });
-                        //throw new ProjectException(DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, "teste", ex.GetBaseException().Message));
+
                     }
-                    _ = "Teste";
-                    //await Task.Run(() => Thread.Sleep(int.Parse(delayParam))).ConfigureAwait(true);
-                    //await Task.Delay(int.Parse(delayParam));
-
-
                 }
                 return;
             }
