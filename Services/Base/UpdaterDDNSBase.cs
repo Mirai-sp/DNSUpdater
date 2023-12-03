@@ -9,7 +9,7 @@ namespace DNSUpdater.Services.Base
 
         public static string UpdateDNSByConfigModel(ConfigModelDTO configModel, ListViewItem listViewItem)
         {
-            Type serviceType = Type.GetType($"DNSUpdater.Services.{configModel.ServiceName}");
+            Type serviceType = Type.GetType($"DNSUpdater.Services.Updater.{configModel.ServiceName}");
             if (serviceType == null)
                 return BusinessConfig.FAILED(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName));
             else

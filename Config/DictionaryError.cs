@@ -8,6 +8,7 @@
         public static string ERROR_NO_SCHEDULED_TASK_SELECTED() { return "Please select a scheduled task."; }
         public static string ERROR_NOT_WAS_POSSIBLE_LOAD_SELECTED_SCHEDULED_JOB(string serviceName) { return $"Not was possible to retrieve information for Service Name({serviceName} try reload the schedule job list."; }
         public static string ERROR_DUPLICATED_PROPERTIES(string serviceName, string duplicatedProperties) { return $"Duplicated propertie was found and this is not allowed, please fix it and reload configuration.\r\n\r\nService Name:{serviceName}\r\nDuplicated Properties:{duplicatedProperties}"; }
+        public static string ERROR_REQUIRED_PROPERTIES(string serviceName, string requiredPropertyes) { return $"Propertyes({requiredPropertyes}) is required, please fix it and reload configuration.\r\n\r\nService Name:{serviceName}"; }
         public static string ERROR_UPDATER_CLASS_NOT_FOUND(string className) { return $"Updater Class({className}) not found."; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using DNSUpdater.Services;
-using DNSUpdater.Services.Base;
+﻿using DNSUpdater.Services.Base;
+using DNSUpdater.Services.Updater;
 
 namespace DNSUpdater.Utils
 {

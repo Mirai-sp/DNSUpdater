@@ -42,8 +42,12 @@ namespace DNSUpdater
 
             configReader.ForEach(config =>
             {
-                CheckDuplicatesPropertyes(config.Properties, config.ServiceName);
-                config.WorkStrategy.ForEach(workStrategy => CheckDuplicatesPropertyes(workStrategy.Properties, config.ServiceName));
+                FunctionHelper.CheckDuplicatesPropertyes(config.Properties, config.ServiceName);
+                config.WorkStrategy.ForEach(workStrategy =>
+                {
+                    FunctionHelper.CheckDuplicatesPropertyes(workStrategy.Properties, config.ServiceName);
+                    FunctionHelper.CheckRequiredProperties(workStrategy.Properties, new List<string>() { BusinessConfig.PROPERTY_RETRY, BusinessConfig.PROPERTY_DELAY }, config.ServiceName);
+                });
             });
 
             configReader.ForEach(config =>
@@ -58,17 +62,6 @@ namespace DNSUpdater
                 });
             return configReader;
 
-        }
-
-        private void CheckDuplicatesPropertyes(List<PropertiesDTO> propertiesList, string serviceName)
-        {
-            var findDuplicatedParams = propertiesList.GroupBy(x => x.Name)
-                        .Where(g => g.Count() > 1)
-                        .Select(y => y.Key)
-                        .ToList();
-
-            if (findDuplicatedParams.Count() > 0)
-                throw new ProjectException(DictionaryError.ERROR_DUPLICATED_PROPERTIES(serviceName, string.Join(", ", findDuplicatedParams)));
         }
 
         private void ReloadConfiguration()

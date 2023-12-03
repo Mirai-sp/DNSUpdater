@@ -1,7 +1,7 @@
 ﻿using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
 
-namespace DNSUpdater.Services
+namespace DNSUpdater.Services.Strategy
 {
     public class UpdaterDDNSDyndns6 : UpdaterDDNSBase
     {
