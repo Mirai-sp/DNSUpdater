@@ -21,15 +21,9 @@ namespace DNSUpdater.Services.Strategy
                 return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message));
             }
 
-            /*try
-            {*/
-            string ip = await httpClient.GetAsync(FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL)).ConfigureAwait(false); //GetAwaiter().GetResult();
-            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, ip)).ConfigureAwait(false);
-            /*}
-            catch (Exception e)
-            {
-                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message)).ConfigureAwait(false);
-            }*/
+
+            string ip = await httpClient.GetAsync(FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL)); //GetAwaiter().GetResult();
+            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, ip));
 
 
 

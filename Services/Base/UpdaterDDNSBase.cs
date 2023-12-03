@@ -12,12 +12,11 @@ namespace DNSUpdater.Services.Base
         {
             Type serviceType = Type.GetType($"DNSUpdater.Services.Updater.{configModel.ServiceName}");
             if (serviceType == null)
-                await Task.Run(() => configModel.Response = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName)))).ConfigureAwait(false);
-            //return await Task .Run(() => configModel.Response = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName)))).ConfigureAwait(false);
+                await Task.Run(() => configModel.Response = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName))));
             else
             {
                 UpdaterDDNSBase serviceInstance = (UpdaterDDNSBase)Activator.CreateInstance(serviceType);
-                await Task.Run(() => serviceInstance.UpdateDNS(configModel, listViewItem)).ConfigureAwait(true);
+                await Task.Run(() => serviceInstance.UpdateDNS(configModel, listViewItem));
             }
         }
     }

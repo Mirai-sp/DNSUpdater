@@ -105,7 +105,7 @@ namespace DNSUpdater
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
 
-            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(false);
+            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item);
 
             configModel.Timer.Enabled = true;
         }
@@ -116,7 +116,7 @@ namespace DNSUpdater
                 selectedScheduledItem = null;
             else
             {
-                ConfigModelDTO scheduledJob = configuration.Where(search => search.ServiceName.Equals(servicesList.FocusedItem.Text)).FirstOrDefault();
+                ConfigModelDTO scheduledJob = configuration.Where(search => search.Key.Equals(servicesList.FocusedItem.Tag)).FirstOrDefault();
                 if (scheduledJob == null)
                     throw new ProjectException(DictionaryError.ERROR_NOT_WAS_POSSIBLE_LOAD_SELECTED_SCHEDULED_JOB(servicesList.FocusedItem.Text));
                 selectedScheduledItem = scheduledJob;

@@ -17,6 +17,10 @@ namespace DNSUpdater.Models.DTO.Config
         public Timer Timer { get; set; }
         [JsonIgnore]
         public string Key = FunctionHelper.GenerateRandonString();
+
+        [JsonIgnore]
+        public string IP = string.Empty;
+
         [JsonIgnore]
         public StrategyResponseDTO Response { get; set; } = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.PENDING);
     }

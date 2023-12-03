@@ -35,7 +35,7 @@ namespace DNSUpdater.Services.Base
                 }
                 catch (Exception ex)
                 {
-                    configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(retryParam, "Int"))).ConfigureAwait(false);
+                    configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(retryParam, "Int")));
                     return;
                 }
 
@@ -46,7 +46,7 @@ namespace DNSUpdater.Services.Base
                 }
                 catch (Exception ex)
                 {
-                    configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(delayParam, "Int"))).ConfigureAwait(false);
+                    configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(delayParam, "Int")));
                     return;
                 }
 
@@ -55,14 +55,14 @@ namespace DNSUpdater.Services.Base
 
                     try
                     {
-                        configModel.Response = await strategyInstange.Execute(configModel, properties).ConfigureAwait(false);
+                        configModel.Response = await strategyInstange.Execute(configModel, properties);
                         return;
                     }
                     catch (Exception ex)
                     {
-                        configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, strategyName, urlParam, ex.GetBaseException().Message))).ConfigureAwait(false);
+                        configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, strategyName, urlParam, ex.GetBaseException().Message)));
                         retryCount++;
-                        await Task.Delay(int.Parse(delayParam)).ConfigureAwait(false);
+                        await Task.Delay(int.Parse(delayParam));
 
                     }
                 }
