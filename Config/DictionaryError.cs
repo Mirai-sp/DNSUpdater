@@ -13,5 +13,6 @@
         public static string ERROR_UNABLE_TO_CONVERT_VALUE(string value, string desireType) { return $"Unable to convert {value} to {desireType}."; }
         public static string ERROR_UNABLE_TO_UPDATE = "Unable to update.";
         public static string ERROR_UNABLE_TO_REACH_THE_REQUESTED_URL(string requestedURL) { return $"Unable to reach the requested url {requestedURL}."; }
+        public static string ERROR_ATTEMPT_RESEND(string actualAttempt, string totalAttempt, string strategyName, string error) { return $"Attempt {actualAttempt} of {totalAttempt} Strategy {strategyName} Error: {error}"; }
     }
 }
