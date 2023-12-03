@@ -9,6 +9,7 @@ namespace DNSUpdater.Models.DTO.Config
         public string ServiceName { get; set; }
         public bool Enabled { get; set; }
         public int Interval { get; set; }
+        public List<PropertiesDTO> Properties { get; set; }
         public List<WorkStrategyDTO> WorkStrategy { get; set; }
 
         [JsonIgnore]
