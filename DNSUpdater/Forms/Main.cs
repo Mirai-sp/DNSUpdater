@@ -56,11 +56,10 @@ namespace DNSUpdater
             var timer = (Timer)source;
 
             ConfigModelDTO configModel = (ConfigModelDTO)timer.Tag;
-            ListViewItem item = servicesList.Items.Cast<ListViewItem>().Where(elem => elem.Tag.Equals(configModel.Key)).FirstOrDefault();
-            item.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.LAST_UPDATED)).FirstOrDefault().Index].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-            item.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.LAST_UPDATED)).FirstOrDefault().Index].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-            // Item.SubItems[BusinessConfig.LAST_UPDATED].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-
+            ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
+            FunctionHelper.AutoSizeColumnList(servicesList);
             //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
@@ -86,14 +85,20 @@ namespace DNSUpdater
             }
         }
 
-        private void UpdateSelectedItemInfo()
+        private void UpdateSelectedItemInfo(bool setScheduleInfo)
         {
             /*if (servicesList.SelectedItems.Count == 0)
                 return;*/
 
             btnStartStop.Enabled = selectedScheduledItem != null;
             btnStartStop.Text = (selectedScheduledItem == null ? "Invalid Selection" : (selectedScheduledItem.Timer.Enabled ? BusinessConfig.DISABLE : BusinessConfig.ENABLE));
-            servicesList.FocusedItem.SubItems[servicesList.Columns.Cast<ColumnHeader>().Where(search => search.Text.Equals(BusinessConfig.ENABLED)).FirstOrDefault().Index].Text = (btnStartStop.Text.Equals(BusinessConfig.ENABLE) ? BusinessConfig.FALSE : BusinessConfig.TRUE);
+            servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.ENABLED)].Text = (btnStartStop.Text.Equals(BusinessConfig.ENABLE) ? BusinessConfig.FALSE : BusinessConfig.TRUE);
+            if (setScheduleInfo)
+            {
+                servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = BusinessConfig.NOT_RUNED_YET;
+                servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = !selectedScheduledItem.Timer.Enabled ? BusinessConfig.NOT_SCHEDULED : DateTime.Now.AddMilliseconds(selectedScheduledItem.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
+            }
+            FunctionHelper.AutoSizeColumnList(servicesList);
         }
 
         private void LoadListView(List<ConfigModelDTO> configuration)
@@ -145,7 +150,7 @@ namespace DNSUpdater
         {
             selectedScheduledItem.Timer.Enabled = !selectedScheduledItem.Timer.Enabled;
             selectedScheduledItem.Enabled = selectedScheduledItem.Timer.Enabled;
-            UpdateSelectedItemInfo();
+            UpdateSelectedItemInfo(true);
         }
 
         private void servicesList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -154,7 +159,7 @@ namespace DNSUpdater
 
             if (servicesList.SelectedItems.Count == 0)
                 return;
-            UpdateSelectedItemInfo();
+            UpdateSelectedItemInfo(false);
         }
 
         private void Main_Resize(object sender, EventArgs e)
