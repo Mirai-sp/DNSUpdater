@@ -13,7 +13,7 @@ namespace DNSUpdater.Services.Updater
             StrategyResponseDTO response = new StrategyResponseDTO(StrategyResponseStatusEnum.Error, BusinessConfig.FAILED(DictionaryError.ERROR_UNABLE_TO_UPDATE));
             foreach (WorkStrategyDTO strategy in configModel.WorkStrategy)
             {
-                response = await StrategyBase.ExecuteByStrategyName(configModel, strategy.StrategyName, strategy.Properties).ConfigureAwait(false);
+                await StrategyBase.ExecuteByStrategyName(configModel, strategy.StrategyName, strategy.Properties).ConfigureAwait(false);
                 if (response.Status.Equals(StrategyResponseStatusEnum.Success)) { }
                 break;
             }

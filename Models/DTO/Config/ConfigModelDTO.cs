@@ -1,4 +1,5 @@
-﻿using DNSUpdater.Utils.Helpers;
+﻿using DNSUpdater.Config;
+using DNSUpdater.Utils.Helpers;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
 
@@ -17,6 +18,6 @@ namespace DNSUpdater.Models.DTO.Config
         [JsonIgnore]
         public string Key = FunctionHelper.GenerateRandonString();
         [JsonIgnore]
-        public string IP = string.Empty;
+        public StrategyResponseDTO Response { get; set; } = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.PENDING);
     }
 }

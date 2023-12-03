@@ -97,28 +97,16 @@ namespace DNSUpdater
         private async void ScheduledTaskRun(object source, EventArgs e)
         {
             var timer = (Timer)source;
+            ConfigModelDTO configModel = (ConfigModelDTO)timer.Tag;
+            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(false);
 
-            Task.Run(async () =>
-            {
-                ConfigModelDTO configModel = (ConfigModelDTO)timer.Tag;
-                if (InvokeRequired)
-                {
-                    Invoke(new MethodInvoker(delegate { ScheduledTaskRun(source, e); }));
-                }
-                else
-                {
-                    ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
+            ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
 
-                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-                    //item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
-                    FunctionHelper.AutoSizeColumnList(servicesList);
-                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
-                    item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item).ConfigureAwait(true).GetAwaiter().GetResult().Message;
-                }
-            }).ConfigureAwait(false);
-
-            //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
+            FunctionHelper.AutoSizeColumnList(servicesList);
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = BusinessConfig.UPDATING;
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.STATUS)].Text = configModel.Response.Message;
         }
 
         private void DefineSelectedScheduledJob()
