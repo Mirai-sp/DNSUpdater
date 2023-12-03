@@ -20,6 +20,7 @@ namespace DNSUpdater
         private List<ConfigModelDTO> LoadConfiguration()
         {
             string configFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config.json");
+            List<ConfigModelDTO> configReader;
             if (!File.Exists(configFilePath))
                 throw new ProjectException(DictionaryError.ERROR_CONFIG_FILE_DOES_NOT_EXISTS(configFilePath));
 
@@ -30,17 +31,31 @@ namespace DNSUpdater
 
             try
             {
-                List<ConfigModelDTO> configuration = JsonConvert.DeserializeObject<List<ConfigModelDTO>>(configJSON);
-                configuration.ForEach(config =>
+                configReader = JsonConvert.DeserializeObject<List<ConfigModelDTO>>(configJSON);
+            }
+            catch
+            {
+                MessageBox.Show(DictionaryError.ERROR_CONFIG_FILE_IS_INVALID(configFilePath), BusinessConfig.ERROR_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<ConfigModelDTO>();
+            }
+
+            configReader.ForEach(config =>
+            {
+                config.WorkStrategy.ForEach(workStrategy =>
                 {
-                    var findDuplicatedParams = config.Properties.GroupBy(x => x.Name)
+                    var findDuplicatedParams = workStrategy.Properties.GroupBy(x => x.Name)
                         .Where(g => g.Count() > 1)
                         .Select(y => y.Key)
                         .ToList();
 
                     if (findDuplicatedParams.Count() > 0)
                         throw new ProjectException(DictionaryError.ERROR_DUPLICATED_PROPERTIES(config.ServiceName, string.Join(", ", findDuplicatedParams)));
+                });
 
+            });
+
+            configReader.ForEach(config =>
+                {
                     config.Timer = new Timer()
                     {
                         Tag = config,
@@ -49,14 +64,8 @@ namespace DNSUpdater
                     };
                     config.Timer.Tick += new EventHandler(ScheduledTaskRun);
                 });
-                return configuration;
-            }
-            catch
-            {
-                MessageBox.Show(DictionaryError.ERROR_CONFIG_FILE_IS_INVALID(configFilePath), BusinessConfig.ERROR_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //Application.Exit();
-                return new List<ConfigModelDTO>();
-            }
+            return configReader;
+
         }
 
         private void ReloadConfiguration()
@@ -74,8 +83,15 @@ namespace DNSUpdater
                 servicesList.Clear();
             }
 
-            configuration = LoadConfiguration();
-            if (configuration.Count > 0)
+            try
+            {
+                configuration = LoadConfiguration();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.GetBaseException().Message, BusinessConfig.ERROR_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            if (configuration != null && configuration.Count > 0)
                 LoadListView(configuration);
 
             btnStartStop.Enabled = false;
@@ -94,15 +110,6 @@ namespace DNSUpdater
             MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
-        /*private void CheckSelectedItem()
-        {
-            if (servicesList.SelectedItems.Count == 0)
-            {
-                MessageBox.Show(DictionaryError.ERROR_NO_SCHEDULED_TASK_SELECTED(), BusinessConfig.ERROR_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-        }*/
-
         private void DefineSelectedScheduledJob()
         {
             if (servicesList.SelectedItems.Count == 0)
@@ -118,9 +125,6 @@ namespace DNSUpdater
 
         private void UpdateSelectedItemInfo(bool setScheduleInfo)
         {
-            /*if (servicesList.SelectedItems.Count == 0)
-                return;*/
-
             btnStartStop.Enabled = selectedScheduledItem != null;
             btnStartStop.Text = (selectedScheduledItem == null ? "Invalid Selection" : (selectedScheduledItem.Timer.Enabled ? BusinessConfig.DISABLE : BusinessConfig.ENABLE));
             servicesList.FocusedItem.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.ENABLED)].Text = (btnStartStop.Text.Equals(BusinessConfig.ENABLE) ? BusinessConfig.FALSE : BusinessConfig.TRUE);
@@ -143,7 +147,6 @@ namespace DNSUpdater
 
             });
 
-            //define um item listview
             ListViewItem item;
             configuration.ForEach(config =>
             {

@@ -1,5 +1,4 @@
-﻿using DNSUpdater.Models.DTO.Config.Properties;
-using DNSUpdater.Utils.Helpers;
+﻿using DNSUpdater.Utils.Helpers;
 using Newtonsoft.Json;
 using Timer = System.Windows.Forms.Timer;
 
@@ -10,7 +9,7 @@ namespace DNSUpdater.Models.DTO.Config
         public string ServiceName { get; set; }
         public bool Enabled { get; set; }
         public int Interval { get; set; }
-        public List<PropertiesDTO> Properties { get; set; }
+        public List<WorkStrategyDTO> WorkStrategy { get; set; }
 
         [JsonIgnore]
         public Timer Timer { get; set; }

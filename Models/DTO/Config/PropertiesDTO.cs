@@ -1,4 +1,4 @@
-﻿namespace DNSUpdater.Models.DTO.Config.Properties
+﻿namespace DNSUpdater.Models.DTO.Config
 {
     public class PropertiesDTO
     {
