@@ -33,6 +33,7 @@
             this.btnStartStop = new System.Windows.Forms.Button();
             this.servicesList = new System.Windows.Forms.ListView();
             this.lblNow = new System.Windows.Forms.Label();
+            this.btnReloadConfiguration = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Timer
@@ -78,11 +79,22 @@
             this.lblNow.TabIndex = 4;
             this.lblNow.Text = "label1";
             // 
+            // btnReloadConfiguration
+            // 
+            this.btnReloadConfiguration.Location = new System.Drawing.Point(86, 405);
+            this.btnReloadConfiguration.Name = "btnReloadConfiguration";
+            this.btnReloadConfiguration.Size = new System.Drawing.Size(75, 23);
+            this.btnReloadConfiguration.TabIndex = 5;
+            this.btnReloadConfiguration.Text = "Reload";
+            this.btnReloadConfiguration.UseVisualStyleBackColor = true;
+            this.btnReloadConfiguration.Click += new System.EventHandler(this.btnReloadConfiguration_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 440);
+            this.Controls.Add(this.btnReloadConfiguration);
             this.Controls.Add(this.lblNow);
             this.Controls.Add(this.servicesList);
             this.Controls.Add(this.btnStartStop);
@@ -101,5 +113,6 @@
         private Button btnStartStop;
         private ListView servicesList;
         private Label lblNow;
+        private Button btnReloadConfiguration;
     }
 }

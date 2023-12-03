@@ -33,6 +33,14 @@ namespace DNSUpdater
                 List<ConfigModelDTO> configuration = JsonConvert.DeserializeObject<List<ConfigModelDTO>>(configJSON);
                 configuration.ForEach(config =>
                 {
+                    var findDuplicatedParams = config.Properties.GroupBy(x => x.Name)
+                        .Where(g => g.Count() > 1)
+                        .Select(y => y.Key)
+                        .ToList();
+
+                    if (findDuplicatedParams.Count() > 0)
+                        throw new ProjectException(DictionaryError.ERROR_DUPLICATED_PROPERTIES(config.ServiceName, string.Join(", ", findDuplicatedParams)));
+
                     config.Timer = new Timer()
                     {
                         Tag = config,
@@ -46,9 +54,32 @@ namespace DNSUpdater
             catch
             {
                 MessageBox.Show(DictionaryError.ERROR_CONFIG_FILE_IS_INVALID(configFilePath), BusinessConfig.ERROR_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Application.Exit();
-                return null;
+                //Application.Exit();
+                return new List<ConfigModelDTO>();
             }
+        }
+
+        private void ReloadConfiguration()
+        {
+            selectedScheduledItem = null;
+            if (configuration != null)
+            {
+                configuration.ForEach(config =>
+                {
+                    config.Timer.Enabled = false;
+                    config.Timer.Tick -= ScheduledTaskRun;
+                    config.Timer = null;
+                });
+                configuration.Clear();
+                servicesList.Clear();
+            }
+
+            configuration = LoadConfiguration();
+            if (configuration.Count > 0)
+                LoadListView(configuration);
+
+            btnStartStop.Enabled = false;
+            btnStartStop.Text = BusinessConfig.ENABLED;
         }
 
         private void ScheduledTaskRun(object source, EventArgs e)
@@ -60,7 +91,7 @@ namespace DNSUpdater
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
             FunctionHelper.AutoSizeColumnList(servicesList);
-            //MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
+            MessageBox.Show($"Teste Service Name is {configModel.ServiceName} and item text is {item.Text}");
         }
 
         /*private void CheckSelectedItem()
@@ -134,12 +165,8 @@ namespace DNSUpdater
         #region EventControls
         private void Form1_Load(object sender, EventArgs e)
         {
-            configuration = LoadConfiguration();
-            if (configuration != null)
-            {
-                LoadListView(configuration);
-                timer_Tick(sender, e);
-            }
+            ReloadConfiguration();
+            timer_Tick(sender, e);
         }
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -168,5 +195,10 @@ namespace DNSUpdater
         }
 
         #endregion
+
+        private void btnReloadConfiguration_Click(object sender, EventArgs e)
+        {
+            ReloadConfiguration();
+        }
     }
 }
