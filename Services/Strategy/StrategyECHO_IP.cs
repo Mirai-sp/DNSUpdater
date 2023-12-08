@@ -3,9 +3,11 @@ using DNSUpdater.Models.DTO;
 using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
 using DNSUpdater.Utils;
+using DNSUpdater.Utils.Exceptions;
 using DNSUpdater.Utils.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace DNSUpdater.Services.Strategy
 {
@@ -23,19 +25,23 @@ namespace DNSUpdater.Services.Strategy
                 return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message));
             }
 
-
-            string ip = await httpClient.GetAsync(properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL)); //GetAwaiter().GetResult();
-            if (properties.Any(x => x.Name.ToLower().Equals(BusinessConfig.PROPERTY_OUTPUT_PROPERTIE)))
+            string response = await httpClient.GetAsync(properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL));
+            if (properties.Any(x => x.Name.ToLower().Equals(BusinessConfig.PROPERTY_PATH_PROPERTIE.ToLower())))
             {
-                JObject obj = JsonConvert.DeserializeObject<JObject>(ip);
-                JToken validation = obj.SelectToken(properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_OUTPUT_PROPERTIE));
-                if (validation.)
-                    string test = obj.origin;
+                JObject obj = JsonConvert.DeserializeObject<JObject>(response);
+                string outputPropertiePath = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_PATH_PROPERTIE);
+                JToken validation = obj.SelectToken(outputPropertiePath);
+                if (validation == null)
+                    throw new ProjectException(DictionaryError.ERROR_UNABLE_GET_PROPERTIE_VALUE_FROM_RESPONSE(configModel.ServiceName, response, outputPropertiePath));
+
+                response = validation.ToString();
             }
-            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, ip));
 
+            IPAddress address;
+            if (!IPAddress.TryParse(response, out address))
+                throw new ProjectException(DictionaryError.ERROR_RESPONSE_VALUE_IS_NOT_A_VALID_IP_ADDRESS(configModel.ServiceName, response));
 
-
+            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, response));
         }
     }
 }

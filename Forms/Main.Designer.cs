@@ -81,6 +81,7 @@
             // 
             // btnReloadConfiguration
             // 
+            this.btnReloadConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnReloadConfiguration.Location = new System.Drawing.Point(86, 405);
             this.btnReloadConfiguration.Name = "btnReloadConfiguration";
             this.btnReloadConfiguration.Size = new System.Drawing.Size(75, 23);
@@ -100,6 +101,7 @@
             this.Controls.Add(this.btnStartStop);
             this.Name = "Main";
             this.Text = "DNSUpdater";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Main_Resize);
             this.ResumeLayout(false);

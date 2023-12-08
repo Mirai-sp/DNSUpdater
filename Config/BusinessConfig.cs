@@ -24,7 +24,7 @@
         public static string PROPERTY_GETURL = "GetUrl";
         public static string PROPERTY_SERVICEURL = "ServiceUrl";
         public static string PROPERTY_HTTP_VERB = "HttpVerb";
-        public static string PROPERTY_OUTPUT_PROPERTIE = "OutputPropertie";
+        public static string PROPERTY_PATH_PROPERTIE = "PathPropertie";
         public const string HTTP_GET = "Get";
         public const string HTTP_POST = "Post";
         public const string HTTP_DELETE = "Delete";
