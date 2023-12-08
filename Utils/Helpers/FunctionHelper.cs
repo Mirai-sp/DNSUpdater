@@ -46,7 +46,7 @@ namespace DNSUpdater.Utils.Helpers
             return GuidString;
         }
 
-        public static void CheckDuplicatesPropertyes(List<PropertiesDTO> propertiesList, string serviceName)
+        public static void CheckDuplicatesProperties(List<PropertiesDTO> propertiesList, string serviceName)
         {
             var findDuplicatedParams = propertiesList.GroupBy(x => x.Name)
                         .Where(g => g.Count() > 1)
@@ -69,16 +69,5 @@ namespace DNSUpdater.Utils.Helpers
             if (!validValues.Select(sel => sel.ToLower()).Contains(propertieName.Value.ToLower()))
                 throw new ProjectException(DictionaryError.ERROR_PROPERTIE_VALUE_IS_INVALID(serviceName, propertieName.Name, propertieName.Value));
         }
-
-        public static PropertiesDTO GetPropertyeByName(List<PropertiesDTO> propertiesList, string propertyName)
-        {
-            return propertiesList.Where(search => search.Name.ToLower().Equals(propertyName.ToLower())).DefaultIfEmpty().Select(sel => sel).FirstOrDefault();
-        }
-
-        public static string GetPropertyeValueByName(List<PropertiesDTO> propertiesList, string propertyName)
-        {
-            return GetPropertyeByName(propertiesList, propertyName)?.Value;
-        }
-
     }
 }

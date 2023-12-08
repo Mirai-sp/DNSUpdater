@@ -2,7 +2,6 @@
 using DNSUpdater.Enums;
 using DNSUpdater.Models.DTO;
 using DNSUpdater.Models.DTO.Config;
-using DNSUpdater.Utils.Helpers;
 
 namespace DNSUpdater.Services.Base
 {
@@ -29,8 +28,8 @@ namespace DNSUpdater.Services.Base
                 StrategyResponseDTO response = new StrategyResponseDTO();
                 try
                 {
-                    retryParam = FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_RETRY);
-                    urlParam = FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_GETURL);
+                    retryParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_RETRY);
+                    urlParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL);
                     int.Parse(retryParam);
                 }
                 catch (Exception ex)
@@ -41,7 +40,7 @@ namespace DNSUpdater.Services.Base
 
                 try
                 {
-                    delayParam = FunctionHelper.GetPropertyeValueByName(properties, BusinessConfig.PROPERTY_DELAY);
+                    delayParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_DELAY);
                     int.Parse(delayParam);
                 }
                 catch (Exception ex)

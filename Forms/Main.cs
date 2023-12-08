@@ -42,12 +42,12 @@ namespace DNSUpdater
 
             configReader.ForEach(config =>
             {
-                FunctionHelper.CheckDuplicatesPropertyes(config.Properties, config.ServiceName);
+                FunctionHelper.CheckDuplicatesProperties(config.Properties, config.ServiceName);
                 FunctionHelper.CheckRequiredProperties(config.Properties, new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB }, config.ServiceName);
-                FunctionHelper.CheckPropertyeIsValid(FunctionHelper.GetPropertyeByName(config.Properties, BusinessConfig.PROPERTY_HTTP_VERB), new List<string>() { BusinessConfig.HTTP_GET, BusinessConfig.HTTP_POST, BusinessConfig.HTTP_PUT, BusinessConfig.HTTP_DELETE, BusinessConfig.HTTP_PATCH }, config.ServiceName);
+                FunctionHelper.CheckPropertyeIsValid(config.Properties.GetPropertyeByName(BusinessConfig.PROPERTY_HTTP_VERB), new List<string>() { BusinessConfig.HTTP_GET, BusinessConfig.HTTP_POST, BusinessConfig.HTTP_PUT, BusinessConfig.HTTP_DELETE, BusinessConfig.HTTP_PATCH }, config.ServiceName);
                 config.WorkStrategy.ForEach(workStrategy =>
                 {
-                    FunctionHelper.CheckDuplicatesPropertyes(workStrategy.Properties, config.ServiceName);
+                    FunctionHelper.CheckDuplicatesProperties(workStrategy.Properties, config.ServiceName);
                     FunctionHelper.CheckRequiredProperties(workStrategy.Properties, new List<string>() { BusinessConfig.PROPERTY_RETRY, BusinessConfig.PROPERTY_DELAY }, config.ServiceName);
                 });
             });
@@ -156,7 +156,7 @@ namespace DNSUpdater
 
         private void LoadListView(List<ConfigModelDTO> configuration)
         {
-            List<string> columns = new List<string>() { BusinessConfig.SERVICE_NAME, BusinessConfig.ENABLED, BusinessConfig.INTERVAL, BusinessConfig.LAST_UPDATED, BusinessConfig.NEXT_UPDATE, BusinessConfig.STATUS };
+            List<string> columns = new List<string>() { BusinessConfig.SERVICE_NAME, BusinessConfig.DOMAIN_NAME, BusinessConfig.ENABLED, BusinessConfig.INTERVAL, BusinessConfig.LAST_UPDATED, BusinessConfig.NEXT_UPDATE, BusinessConfig.STATUS };
             columns.ForEach(elem =>
             {
                 ColumnHeader ch = new ColumnHeader();
@@ -171,6 +171,7 @@ namespace DNSUpdater
                 item = new ListViewItem();
                 item.Tag = config.Key;
                 item.Text = config.ServiceName;
+                item.SubItems.Add(config.DomainName);
                 item.SubItems.Add(config.Enabled ? BusinessConfig.TRUE : BusinessConfig.FALSE);
                 item.SubItems.Add(config.Interval.ToString());
                 item.SubItems.Add(BusinessConfig.NOT_RUNED_YET);

@@ -5,6 +5,7 @@
         public static string DATETIME_OUTPUT = "dd/MM/yyyy HH:mm:ss";
         public static string ERROR_TITLE = "Error";
         public static string SERVICE_NAME = "Service Name";
+        public static string DOMAIN_NAME = "Domain Name";
         public static string ENABLED = "Enabled";
         public static string INTERVAL = "Interval";
         public static string LAST_UPDATED = "Last Updated";
@@ -23,6 +24,7 @@
         public static string PROPERTY_GETURL = "GetUrl";
         public static string PROPERTY_SERVICEURL = "ServiceUrl";
         public static string PROPERTY_HTTP_VERB = "HttpVerb";
+        public static string PROPERTY_OUTPUT_PROPERTIE = "OutputPropertie";
         public const string HTTP_GET = "Get";
         public const string HTTP_POST = "Post";
         public const string HTTP_DELETE = "Delete";
