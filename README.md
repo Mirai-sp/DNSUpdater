@@ -12,110 +12,110 @@ For the application to work, a configuration file **config.json** must exist in 
 ~~~json
 [
 {
-    ServiceName : "UpdaterDDNSByHttpRequest",
-    DomainName: "myddnsdomain.com",
-    Enabled: true,
-    Interval: 7000,
-    Properties: [
+    "ServiceName" : "UpdaterDDNSByHttpRequest",
+    "DomainName" : "myddnsdomain.com",
+    "Enabled" : true,
+    "Interval" : 7000,
+    "Properties" : [
         {
-            Name : "ServiceUrl",
-            Value: "http://ddnsUpdaterEndpoint.com"
+            "Name" : "ServiceUrl",
+            "Value" : "http://ddnsUpdaterEndpoint.com"
         },
 	{
-            Name : "HTTPVerb",
-            Value: "Get"
+            "Name" : "HTTPVerb",
+            "Value" : "Get"
         }
     ],
-    WorkStrategy: [
+    "WorkStrategy" : [
         {
-            StrategyName: "StrategyECHO_IP",
-            Enabled : true,
-            Properties: [
+            "StrategyName" : "StrategyECHO_IP",
+            "Enabled" : true,
+            "Properties" : [
                 {
-                    Name : "GETURL",
-                    Value : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                    "Name" : "GETURL",
+                    "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
                 },
                 {
-                    Name : "PATHPROPERTIE",
-                    Value : "object.myIPPropertie"
+                    "Name" : "PATHPROPERTIE",
+                    "Value" : "object.myIPPropertie"
                 },
                 {
-                    Name : "RETRY",
-                    Value : 3
+                    "Name" : "RETRY",
+                    "Value" : 3
                 },
                 {
-                    Name : "DELAY",
-                    Value : 2000
+                    "Name" : "DELAY",
+                    "Value" : 2000
                 },
            ]
         }
    ]
 },
 {
-    ServiceName : "UpdaterDDNSByHttpRequest",
-    DomainName: "myAnotherddnsdomain.com",
-    Enabled: true,
-    Interval: 20000,
-    Properties: [
+    "ServiceName" : "UpdaterDDNSByHttpRequest",
+    "DomainName" : "myAnotherddnsdomain.com",
+    "Enabled" : true,
+    "Interval" : 20000,
+    "Properties" : [
         {
-            Name : "ServiceUrl",
-            Value: "http://ddnsUpdaterEndpointThatReturn.com"
+            "Name" : "ServiceUrl",
+            "Value" : "http://ddnsUpdaterEndpointThatReturn.com"
         },
 	    {
-            Name : "HTTPVerb",
-            Value: "Post"
+            "Name" : "HTTPVerb",
+            "Value" : "Post"
         },
 	    {
-            Name : "UserName",
-            Value: "MyUserName"
+            "Name" : "UserName",
+            "Value" : "MyUserName"
         },
 	    {
-            Name : "Password",
-            Value: "MyPassword"
+            "Name" : "Password",
+            "Value" : "MyPassword"
         },
 	    {
-            Name : "ContentType",
-            Value: "application/json"
+            "Name" : "ContentType",
+            "Value" : "application/json"
         }
     ],
-    WorkStrategy: [
+    "WorkStrategy" : [
         {
-            StrategyName: "StrategyECHO_IP",
-            Enabled : true,
-            Properties: [
+            "StrategyName" : "StrategyECHO_IP",
+            "Enabled" : true,
+            "Properties" : [
                 {
-                    Name : "GETURL",
-                    Value : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                    "Name" : "GETURL",
+                    "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
                 },
                 {
-                    Name : "PATHPROPERTIE",
-                    Value : "object.myIPPropertie"
+                    "Name" : "PATHPROPERTIE",
+                    "Value" : "object.myIPPropertie"
                 },
                 {
-                    Name : "RETRY",
-                    Value : 3
+                    "Name" : "RETRY",
+                    "Value" : 3
                 },
                 {
-                    Name : "DELAY",
-                    Value : 3000
+                    "Name" : "DELAY",
+                    "Value" : 3000
                 },
            ]
         },
         {
-            StrategyName: "StrategyECHO_IP",
-            Enabled : true,
-            Properties: [
+            "StrategyName" : "StrategyECHO_IP",
+            "Enabled" : true,
+            "Properties" : [
                 {
-                    Name : "GETURL",
-                    Value : "http://serviceThatRetrieveWanIP2IfFirstFails"
+                    "Name" : "GETURL",
+                    "Value" : "http://serviceThatRetrieveWanIP2IfFirstFails"
                 },
                 {
-                    Name : "RETRY",
-                    Value : 3
+                    "Name" : "RETRY",
+                    "Value" : 3
                 },
                 {
-                    Name : "DELAY",
-                    Value : 3000
+                    "Name" : "DELAY",
+                    "Value" : 3000
                 }
            ]
         }
