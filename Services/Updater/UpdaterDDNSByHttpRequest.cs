@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DNSUpdater.Services.Updater
 {
-    public class UpdaterDDNSDyndns6 : UpdaterDDNSBase
+    public class UpdaterDDNSByHttpRequest : UpdaterDDNSBase
     {
         private HttpService httpService = FactoryClass.GetHTTPClient();
         public override async Task UpdateDNS(ConfigModelDTO configModel, ListViewItem listViewItem)

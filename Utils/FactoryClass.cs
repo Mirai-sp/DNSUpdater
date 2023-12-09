@@ -13,7 +13,7 @@ namespace DNSUpdater.Utils
         {
             if (dynDNS6 == null)
             {
-                dynDNS6 = new UpdaterDDNSDyndns6();
+                dynDNS6 = new UpdaterDDNSByHttpRequest();
             }
             return dynDNS6;
         }
