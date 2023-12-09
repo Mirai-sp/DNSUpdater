@@ -12,7 +12,7 @@ namespace DNSUpdater.Services.Base
         {
             Type serviceType = Type.GetType($"DNSUpdater.Services.Updater.{configModel.ServiceName}");
             if (serviceType == null)
-                await Task.Run(() => configModel.Response = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName))));
+                await Task.Run(() => configModel.Response = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED_RUN_STRATEGY(DictionaryError.ERROR_UPDATER_CLASS_NOT_FOUND(configModel.ServiceName)), ""));
             else
             {
                 UpdaterDDNSBase serviceInstance = (UpdaterDDNSBase)Activator.CreateInstance(serviceType);

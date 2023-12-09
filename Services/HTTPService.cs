@@ -30,7 +30,7 @@ namespace DNSUpdater.Services
         }
 
 
-        public async Task<string> Post_Put_Path_Delete_Async(string uri, string method, string data, string contentType)
+        public async Task<string> SendAsync(string uri, string method, string data, string contentType)
         {
             using HttpContent content = new StringContent(data, Encoding.UTF8, contentType);
             HttpMethod methodHTTP = HttpMethod.Post;

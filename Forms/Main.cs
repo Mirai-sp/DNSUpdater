@@ -105,11 +105,11 @@ namespace DNSUpdater
             ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
 
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
 
             UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item);
 
             configModel.Timer.Enabled = true;
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
         }
 
         private void DefineSelectedScheduledJob()

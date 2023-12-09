@@ -11,6 +11,7 @@
         public static string ERROR_REQUIRED_PROPERTIES(string serviceName, string requiredPropertyes) { return $"Propertyes({requiredPropertyes}) is required, please fix it and reload configuration.\r\n\r\nService Name:{serviceName}"; }
         public static string ERROR_PROPERTIE_VALUE_IS_INVALID(string serviceName, string propertieName, string propertyeValue) { return $"Propertie Value {propertyeValue} is invalid for {propertieName} context. Service name {serviceName}"; }
         public static string ERROR_UPDATER_CLASS_NOT_FOUND(string className) { return $"Updater Class({className}) not found."; }
+        public static string ERROR_UPDATER_ALL_ATTEMPTS_WAS_TRIED(string strategyName, string serviceName) { return $"All attempts was tried for strategy name {strategyName} in service name {serviceName}, if another strategy is seted, it will be tested now."; }
         public static string ERROR_UNABLE_TO_CONVERT_VALUE(string value, string desireType) { return $"Unable to convert {value} to {desireType}."; }
         public static string ERROR_UNABLE_TO_UPDATE = "Unable to update.";
         public static string ERROR_UNABLE_TO_REACH_THE_REQUESTED_URL(string requestedURL) { return $"Unable to reach the requested url {requestedURL}."; }

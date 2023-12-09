@@ -23,6 +23,6 @@ namespace DNSUpdater.Models.DTO.Config
         public string IP = string.Empty;
 
         [JsonIgnore]
-        public StrategyResponseDTO Response { get; set; } = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.PENDING);
+        public StrategyResponseDTO Response { get; set; } = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.PENDING, "");
     }
 }

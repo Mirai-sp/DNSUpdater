@@ -24,6 +24,7 @@
         public static string PROPERTY_GETURL = "GetUrl";
         public static string PROPERTY_SERVICEURL = "ServiceUrl";
         public static string PROPERTY_HTTP_VERB = "HttpVerb";
+        public static string PROPERTY_CONTENT_TYPE = "ContentType";
         public static string PROPERTY_PATH_PROPERTIE = "PathPropertie";
         public const string HTTP_GET = "Get";
         public const string HTTP_POST = "Post";
@@ -31,8 +32,11 @@
         public const string HTTP_PUT = "Put";
         public const string HTTP_PATCH = "PATCH";
 
-        public static string FAILED(string err) { return $"Failed: {err}"; }
+        public static string INITIALIZING_UPDATE(string serviceName) { return $"Starting update process to {serviceName}"; }
+        public static string FAILED_RUN_STRATEGY(string err) { return $"Failed Run Strategy: {err}"; }
+        public static string FAILED_UPDATE(string err) { return $"Failed Update: {err}"; }
         public static string NO_CHANGED(string ip) { return $"Update Not Necessary to: {ip}"; }
-        public static string SUCCESS(string ip) { return $"Success. DNS Was Updated to: {ip}"; }
+        public static string SUBMITED(string response) { return $"Request Submited: {response}"; }
+        public static string STRATEGY_RETRIEVE_IP_SUCESSFULL(string serviceName, string IP) { return $"Strategy was executed for service {serviceName} with success and the retrieved IP is {IP}, now we will continue and check if is necessary send a update request IP"; }
     }
 }

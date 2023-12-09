@@ -22,7 +22,7 @@ namespace DNSUpdater.Services.Strategy
             }
             catch (Exception e)
             {
-                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message));
+                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, e.GetBaseException().Message, ""));
             }
 
             string response = await httpClient.GetAsync(properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL));
@@ -41,7 +41,7 @@ namespace DNSUpdater.Services.Strategy
             if (!IPAddress.TryParse(response, out address))
                 throw new ProjectException(DictionaryError.ERROR_RESPONSE_VALUE_IS_NOT_A_VALID_IP_ADDRESS(configModel.ServiceName, response));
 
-            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, response));
+            return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Success, BusinessConfig.STRATEGY_RETRIEVE_IP_SUCESSFULL(configModel.ServiceName, response), response));
         }
     }
 }
