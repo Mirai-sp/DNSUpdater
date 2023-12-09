@@ -19,5 +19,6 @@
 
         public static string ERROR_UNABLE_GET_PROPERTIE_VALUE_FROM_RESPONSE(string serviceName, string response, string value) { return $"Unable to get the propertie value {value} from response({response}). Service name {serviceName}"; }
         public static string ERROR_RESPONSE_VALUE_IS_NOT_A_VALID_IP_ADDRESS(string serviceName, string response) { return $"Response value {response} is not a valid ip address. Service Name {serviceName}"; }
+        public static string ERROR_INVALID_HTTP_VERB_PROVIDED(string providedMethod) { return $"Invalid HTTP Verb Provided({providedMethod}"; }
     }
 }

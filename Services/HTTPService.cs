@@ -34,14 +34,24 @@ namespace DNSUpdater.Services
         {
             using HttpContent content = new StringContent(data, Encoding.UTF8, contentType);
             HttpMethod methodHTTP = HttpMethod.Post;
-            if (method.ToLower().Equals(BusinessConfig.HTTP_POST.ToLower()))
-                methodHTTP = HttpMethod.Post;
-            else if (method.ToLower().Equals(BusinessConfig.HTTP_DELETE.ToLower()))
-                methodHTTP = HttpMethod.Delete;
-            else if (method.ToLower().Equals(BusinessConfig.HTTP_PATCH.ToLower()))
-                methodHTTP = HttpMethod.Patch;
-            else if (method.ToLower().Equals(BusinessConfig.HTTP_PUT.ToLower()))
-                methodHTTP = HttpMethod.Put;
+
+
+            switch (true)
+            {
+                case bool b when method.Equals(BusinessConfig.HTTP_POST.ToLower(), StringComparison.InvariantCultureIgnoreCase):
+                    methodHTTP = HttpMethod.Post;
+                    break;
+                case bool b when method.Equals(BusinessConfig.HTTP_DELETE.ToLower(), StringComparison.InvariantCultureIgnoreCase):
+                    methodHTTP = HttpMethod.Delete;
+                    break;
+                case bool b when method.Equals(BusinessConfig.HTTP_PATCH.ToLower(), StringComparison.InvariantCultureIgnoreCase):
+                    methodHTTP = HttpMethod.Patch;
+                    break;
+                case bool b when method.Equals(BusinessConfig.HTTP_PUT.ToLower(), StringComparison.InvariantCultureIgnoreCase):
+                    methodHTTP = HttpMethod.Put;
+                    break;
+                default: throw new ArgumentException(DictionaryError.ERROR_INVALID_HTTP_VERB_PROVIDED(method));
+            }
 
             HttpRequestMessage requestMessage = new HttpRequestMessage()
             {

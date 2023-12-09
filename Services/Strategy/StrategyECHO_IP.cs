@@ -4,7 +4,6 @@ using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
 using DNSUpdater.Utils;
 using DNSUpdater.Utils.Exceptions;
-using DNSUpdater.Utils.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -18,7 +17,7 @@ namespace DNSUpdater.Services.Strategy
         {
             try
             {
-                FunctionHelper.CheckRequiredProperties(properties, new List<string>() { BusinessConfig.PROPERTY_GETURL }, configModel.ServiceName);
+                properties.CheckRequiredProperties(new List<string>() { BusinessConfig.PROPERTY_GETURL }, configModel.ServiceName);
             }
             catch (Exception e)
             {

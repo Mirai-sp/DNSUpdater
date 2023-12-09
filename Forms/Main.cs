@@ -43,13 +43,13 @@ namespace DNSUpdater
 
             configReader.ForEach(config =>
             {
-                FunctionHelper.CheckDuplicatesProperties(config.Properties, config.ServiceName);
-                FunctionHelper.CheckRequiredProperties(config.Properties, new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB }, config.ServiceName);
-                FunctionHelper.CheckPropertyeIsValid(config.Properties.GetPropertyeByName(BusinessConfig.PROPERTY_HTTP_VERB), new List<string>() { BusinessConfig.HTTP_GET, BusinessConfig.HTTP_POST, BusinessConfig.HTTP_PUT, BusinessConfig.HTTP_DELETE, BusinessConfig.HTTP_PATCH }, config.ServiceName);
+                config.Properties.CheckDuplicatesProperties(config.ServiceName);
+                config.Properties.CheckRequiredProperties(new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB }, config.ServiceName);
+                config.Properties.GetPropertyeByName(BusinessConfig.PROPERTY_HTTP_VERB).CheckPropertyeIsValid(new List<string>() { BusinessConfig.HTTP_GET, BusinessConfig.HTTP_POST, BusinessConfig.HTTP_PUT, BusinessConfig.HTTP_DELETE, BusinessConfig.HTTP_PATCH }, config.ServiceName);
                 config.WorkStrategy.ForEach(workStrategy =>
                 {
-                    FunctionHelper.CheckDuplicatesProperties(workStrategy.Properties, config.ServiceName);
-                    FunctionHelper.CheckRequiredProperties(workStrategy.Properties, new List<string>() { BusinessConfig.PROPERTY_RETRY, BusinessConfig.PROPERTY_DELAY }, config.ServiceName);
+                    workStrategy.Properties.CheckDuplicatesProperties(config.ServiceName);
+                    workStrategy.Properties.CheckRequiredProperties(new List<string>() { BusinessConfig.PROPERTY_RETRY, BusinessConfig.PROPERTY_DELAY }, config.ServiceName);
                 });
             });
 
