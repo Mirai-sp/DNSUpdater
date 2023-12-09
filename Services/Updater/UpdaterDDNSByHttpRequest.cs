@@ -15,7 +15,7 @@ namespace DNSUpdater.Services.Updater
             configModel.Response.Status = StrategyResponseStatusEnum.Error;
             configModel.Response.Message = BusinessConfig.INITIALIZING_UPDATE(configModel.ServiceName);
 
-            foreach (WorkStrategyDTO strategy in configModel.WorkStrategy)
+            foreach (WorkStrategyDTO strategy in configModel.WorkStrategy.Where(find => find.Enabled.Equals(true)))
             {
                 configModel.Response = await StrategyBase.ExecuteByStrategyName(configModel, strategy.StrategyName, strategy.Properties);
                 if (configModel.Response.Status.Equals(StrategyResponseStatusEnum.Success))
