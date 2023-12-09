@@ -9,7 +9,7 @@ The application is fully customizable and allows you to implement new strategy c
 
 For the application to work, a configuration file **config.json** must exist in the application directory with the following model.
 
-~~~Json
+~~~json
 [
 {
     ServiceName : "UpdaterDDNSByHttpRequest",
@@ -127,7 +127,7 @@ For the application to work, a configuration file **config.json** must exist in 
 ## PHP Echo Wan IP
 
 If you want to host your own service that returns an IP address, you can create a **PHP file** with the following content.
-~~~PHP
+~~~php
 <?php
     header('Content-Type: application/json; charset=utf-8');
     $ip_address['origin'] = $_SERVER["REMOTE_ADDR"];
