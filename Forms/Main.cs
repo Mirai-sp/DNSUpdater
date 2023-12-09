@@ -1,4 +1,5 @@
 using DNSUpdater.Config;
+using DNSUpdater.Forms;
 using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
 using DNSUpdater.Utils.Exceptions;
@@ -104,9 +105,9 @@ namespace DNSUpdater
 
             ListViewItem item = servicesList.GetListViewByConfigModelKey(configModel);
 
+            item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = BusinessConfig.UPDATING;
+            await UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item);
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.LAST_UPDATED)].Text = DateTime.Now.ToString(BusinessConfig.DATETIME_OUTPUT);
-
-            UpdaterDDNSBase.UpdateDNSByConfigModel(configModel, item);
 
             configModel.Timer.Enabled = true;
             item.SubItems[servicesList.GetSubItemIndexByText(BusinessConfig.NEXT_UPDATE)].Text = DateTime.Now.AddMilliseconds(configModel.Interval).ToString(BusinessConfig.DATETIME_OUTPUT);
@@ -223,6 +224,13 @@ namespace DNSUpdater
         private void btnReloadConfiguration_Click(object sender, EventArgs e)
         {
             ReloadConfiguration();
+        }
+
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+            About frmAbout = new About();
+            frmAbout.ShowDialog(this);
+            frmAbout.Dispose();
         }
     }
 }

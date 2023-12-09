@@ -28,85 +28,95 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.Timer = new System.Windows.Forms.Timer(this.components);
-            this.btnStartStop = new System.Windows.Forms.Button();
-            this.servicesList = new System.Windows.Forms.ListView();
-            this.lblNow = new System.Windows.Forms.Label();
-            this.btnReloadConfiguration = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            Timer = new System.Windows.Forms.Timer(components);
+            btnStartStop = new Button();
+            servicesList = new ListView();
+            lblNow = new Label();
+            btnReloadConfiguration = new Button();
+            btnAbout = new Button();
+            SuspendLayout();
             // 
             // Timer
             // 
-            this.Timer.Enabled = true;
-            this.Timer.Interval = 1000;
-            this.Timer.Tick += new System.EventHandler(this.timer_Tick);
+            Timer.Enabled = true;
+            Timer.Interval = 1000;
+            Timer.Tick += timer_Tick;
             // 
             // btnStartStop
             // 
-            this.btnStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStartStop.Enabled = false;
-            this.btnStartStop.Location = new System.Drawing.Point(12, 405);
-            this.btnStartStop.Name = "btnStartStop";
-            this.btnStartStop.Size = new System.Drawing.Size(68, 23);
-            this.btnStartStop.TabIndex = 1;
-            this.btnStartStop.Text = "Start";
-            this.btnStartStop.UseVisualStyleBackColor = true;
-            this.btnStartStop.Click += new System.EventHandler(this.btnStartStop_Click);
+            btnStartStop.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnStartStop.Enabled = false;
+            btnStartStop.Location = new Point(12, 405);
+            btnStartStop.Name = "btnStartStop";
+            btnStartStop.Size = new Size(68, 23);
+            btnStartStop.TabIndex = 1;
+            btnStartStop.Text = "Start";
+            btnStartStop.UseVisualStyleBackColor = true;
+            btnStartStop.Click += btnStartStop_Click;
             // 
             // servicesList
             // 
-            this.servicesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.servicesList.FullRowSelect = true;
-            this.servicesList.Location = new System.Drawing.Point(12, 12);
-            this.servicesList.MultiSelect = false;
-            this.servicesList.Name = "servicesList";
-            this.servicesList.Size = new System.Drawing.Size(883, 370);
-            this.servicesList.TabIndex = 3;
-            this.servicesList.UseCompatibleStateImageBehavior = false;
-            this.servicesList.View = System.Windows.Forms.View.Details;
-            this.servicesList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.servicesList_ItemSelectionChanged);
+            servicesList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            servicesList.FullRowSelect = true;
+            servicesList.Location = new Point(12, 12);
+            servicesList.MultiSelect = false;
+            servicesList.Name = "servicesList";
+            servicesList.Size = new Size(883, 370);
+            servicesList.TabIndex = 3;
+            servicesList.UseCompatibleStateImageBehavior = false;
+            servicesList.View = View.Details;
+            servicesList.ItemSelectionChanged += servicesList_ItemSelectionChanged;
             // 
             // lblNow
             // 
-            this.lblNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblNow.AutoSize = true;
-            this.lblNow.Location = new System.Drawing.Point(12, 385);
-            this.lblNow.Name = "lblNow";
-            this.lblNow.Size = new System.Drawing.Size(38, 15);
-            this.lblNow.TabIndex = 4;
-            this.lblNow.Text = "label1";
+            lblNow.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblNow.AutoSize = true;
+            lblNow.Location = new Point(12, 385);
+            lblNow.Name = "lblNow";
+            lblNow.Size = new Size(38, 15);
+            lblNow.TabIndex = 4;
+            lblNow.Text = "label1";
             // 
             // btnReloadConfiguration
             // 
-            this.btnReloadConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReloadConfiguration.Location = new System.Drawing.Point(86, 405);
-            this.btnReloadConfiguration.Name = "btnReloadConfiguration";
-            this.btnReloadConfiguration.Size = new System.Drawing.Size(75, 23);
-            this.btnReloadConfiguration.TabIndex = 5;
-            this.btnReloadConfiguration.Text = "Reload";
-            this.btnReloadConfiguration.UseVisualStyleBackColor = true;
-            this.btnReloadConfiguration.Click += new System.EventHandler(this.btnReloadConfiguration_Click);
+            btnReloadConfiguration.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnReloadConfiguration.Location = new Point(86, 405);
+            btnReloadConfiguration.Name = "btnReloadConfiguration";
+            btnReloadConfiguration.Size = new Size(75, 23);
+            btnReloadConfiguration.TabIndex = 5;
+            btnReloadConfiguration.Text = "Reload";
+            btnReloadConfiguration.UseVisualStyleBackColor = true;
+            btnReloadConfiguration.Click += btnReloadConfiguration_Click;
+            // 
+            // btnAbout
+            // 
+            btnAbout.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnAbout.Location = new Point(820, 405);
+            btnAbout.Name = "btnAbout";
+            btnAbout.Size = new Size(75, 23);
+            btnAbout.TabIndex = 6;
+            btnAbout.Text = "About";
+            btnAbout.UseVisualStyleBackColor = true;
+            btnAbout.Click += btnAbout_Click;
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(907, 440);
-            this.Controls.Add(this.btnReloadConfiguration);
-            this.Controls.Add(this.lblNow);
-            this.Controls.Add(this.servicesList);
-            this.Controls.Add(this.btnStartStop);
-            this.Name = "Main";
-            this.Text = "DNSUpdater";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Main_Resize);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(907, 440);
+            Controls.Add(btnAbout);
+            Controls.Add(btnReloadConfiguration);
+            Controls.Add(lblNow);
+            Controls.Add(servicesList);
+            Controls.Add(btnStartStop);
+            Name = "Main";
+            Text = "DNSUpdater";
+            WindowState = FormWindowState.Maximized;
+            Load += Form1_Load;
+            Resize += Main_Resize;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -116,5 +126,6 @@
         private ListView servicesList;
         private Label lblNow;
         private Button btnReloadConfiguration;
+        private Button btnAbout;
     }
 }

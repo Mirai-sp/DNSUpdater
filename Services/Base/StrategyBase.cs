@@ -29,9 +29,9 @@ namespace DNSUpdater.Services.Base
                     urlParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL);
                     int.Parse(retryParam);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(retryParam, "Int"), "")); ;
+                    return await Task.FromResult(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(retryParam, "Int"), "")); ;
                 }
 
                 try
@@ -39,9 +39,9 @@ namespace DNSUpdater.Services.Base
                     delayParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_DELAY);
                     int.Parse(delayParam);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(delayParam, "Int"), "")); ;
+                    return await Task.FromResult(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_UNABLE_TO_CONVERT_VALUE(delayParam, "Int"), "")); ;
                 }
 
                 while (retryCount <= int.Parse(retryParam))
@@ -53,13 +53,12 @@ namespace DNSUpdater.Services.Base
                     }
                     catch (Exception ex)
                     {
-                        configModel.Response = await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, strategyName, urlParam, ex.GetBaseException().Message), ""));
+                        configModel.Response = new StrategyResponseDTO(StrategyResponseStatusEnum.Error, DictionaryError.ERROR_ATTEMPT_RESEND(retryCount.ToString(), retryParam, strategyName, urlParam, ex.GetBaseException().Message), "");
                         retryCount++;
                         await Task.Delay(int.Parse(delayParam));
-
                     }
                 }
-                return await Task.FromResult<StrategyResponseDTO>(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED_RUN_STRATEGY(DictionaryError.ERROR_UPDATER_ALL_ATTEMPTS_WAS_TRIED(strategyName, configModel.ServiceName)), ""));
+                return await Task.FromResult(new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.FAILED_RUN_STRATEGY(DictionaryError.ERROR_UPDATER_ALL_ATTEMPTS_WAS_TRIED(strategyName, configModel.ServiceName)), ""));
             }
         }
     }
