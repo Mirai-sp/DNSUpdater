@@ -10,6 +10,7 @@
         public static string INTERVAL = "Interval";
         public static string LAST_UPDATED = "Last Updated";
         public static string NEXT_UPDATE = "Next Update";
+        public static string WAN_IP = "WAN IP";
         public static string STATUS = "Status";
         public static string ENABLE = "Enable";
         public static string DISABLE = "Disable";

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             Timer = new System.Windows.Forms.Timer(components);
             btnStartStop = new Button();
             servicesList = new ListView();
@@ -110,6 +111,7 @@
             Controls.Add(lblNow);
             Controls.Add(servicesList);
             Controls.Add(btnStartStop);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Main";
             Text = "DNSUpdater";
             WindowState = FormWindowState.Maximized;

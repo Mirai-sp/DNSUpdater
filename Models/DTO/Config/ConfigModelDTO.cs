@@ -20,7 +20,7 @@ namespace DNSUpdater.Models.DTO.Config
         public string Key = FunctionHelper.GenerateRandonString();
 
         [JsonIgnore]
-        public string IP = string.Empty;
+        public string IP = BusinessConfig.NOT_RUNED_YET;
 
         [JsonIgnore]
         public StrategyResponseDTO Response { get; set; } = new StrategyResponseDTO(Enums.StrategyResponseStatusEnum.Error, BusinessConfig.PENDING, "");

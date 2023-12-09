@@ -110,6 +110,8 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "About";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "About";
             Load += About_Load;
