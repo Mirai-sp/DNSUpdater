@@ -26,7 +26,7 @@ namespace DNSUpdater.Services.Base
                 try
                 {
                     retryParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_RETRY);
-                    urlParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_GETURL);
+                    urlParam = properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_SERVICEURL);
                     int.Parse(retryParam);
                 }
                 catch

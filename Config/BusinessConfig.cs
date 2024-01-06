@@ -22,11 +22,11 @@
         public static string UPDATING = "Updating";
         public static string PROPERTY_RETRY = "Retry";
         public static string PROPERTY_DELAY = "Delay";
-        public static string PROPERTY_GETURL = "GetUrl";
         public static string PROPERTY_SERVICEURL = "ServiceUrl";
         public static string PROPERTY_HTTP_VERB = "HttpVerb";
         public static string PROPERTY_CONTENT_TYPE = "ContentType";
         public static string PROPERTY_PATH_PROPERTIE = "PathPropertie";
+        public static string PROPERTY_REQUEST_HEADERS = "RequestHeaders";
         public const string HTTP_GET = "Get";
         public const string HTTP_POST = "Post";
         public const string HTTP_DELETE = "Delete";

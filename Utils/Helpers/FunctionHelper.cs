@@ -1,4 +1,9 @@
-﻿namespace DNSUpdater.Utils.Helpers
+﻿using DNSUpdater.Config;
+using DNSUpdater.Models.DTO.Config;
+using DNSUpdater.Services;
+using Newtonsoft.Json;
+
+namespace DNSUpdater.Utils.Helpers
 {
     public static class FunctionHelper
     {
@@ -42,6 +47,14 @@
             return GuidString;
         }
 
+        public static async Task<string> MakeRequestByListOfProperties(List<PropertiesDTO> properties, List<string> ignoredParams, HttpService httpService)
+        {
+            string? headerParam = properties.FirstOrDefault(p => p.Name.ToLower().Equals(BusinessConfig.PROPERTY_REQUEST_HEADERS))?.Value;
+            List<PropertiesDTO> headers = headerParam == null ? new List<PropertiesDTO>() : JsonConvert.DeserializeObject<List<PropertiesDTO>>(headerParam);
 
+            List<PropertiesDTO> data = properties.Where(p => !ignoredParams.Any(p2 => p2.ToLower() == p.Name.ToLower())).ToList();
+
+            return await httpService.SendAsync(properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_SERVICEURL), properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_HTTP_VERB), JsonConvert.SerializeObject(data), headers, properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_CONTENT_TYPE));
+        }
     }
 }

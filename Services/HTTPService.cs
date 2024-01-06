@@ -1,4 +1,5 @@
 ﻿using DNSUpdater.Config;
+using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Utils.Exceptions;
 using System.Net;
 using System.Text;
@@ -30,14 +31,15 @@ namespace DNSUpdater.Services
         }
 
 
-        public async Task<string> SendAsync(string uri, string method, string data, string contentType)
+        public async Task<string> SendAsync(string uri, string method, string data, List<PropertiesDTO> headers, string contentType)
         {
-            using HttpContent content = new StringContent(data, Encoding.UTF8, contentType);
             HttpMethod methodHTTP = HttpMethod.Post;
-
 
             switch (true)
             {
+                case bool b when method.Equals(BusinessConfig.HTTP_GET.ToLower(), StringComparison.InvariantCultureIgnoreCase):
+                    methodHTTP = HttpMethod.Get;
+                    break;
                 case bool b when method.Equals(BusinessConfig.HTTP_POST.ToLower(), StringComparison.InvariantCultureIgnoreCase):
                     methodHTTP = HttpMethod.Post;
                     break;
@@ -52,13 +54,17 @@ namespace DNSUpdater.Services
                     break;
                 default: throw new ArgumentException(DictionaryError.ERROR_INVALID_HTTP_VERB_PROVIDED(method));
             }
+            HttpRequestMessage requestMessage = new HttpRequestMessage();
+            requestMessage.RequestUri = new Uri(uri);
+            requestMessage.Method = methodHTTP;
 
-            HttpRequestMessage requestMessage = new HttpRequestMessage()
+            if (!methodHTTP.Equals(HttpMethod.Get))
             {
-                Content = content,
-                Method = methodHTTP,
-                RequestUri = new Uri(uri)
-            };
+                using HttpContent content = new StringContent(data, Encoding.UTF8, contentType);
+                requestMessage.Content = content;
+            }
+
+            headers.ForEach(element => requestMessage.Headers.Add(element.Name, element.Value));
 
             using HttpResponseMessage response = await _client.SendAsync(requestMessage);
 

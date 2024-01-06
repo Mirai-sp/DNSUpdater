@@ -3,7 +3,7 @@ using DNSUpdater.Enums;
 using DNSUpdater.Models.DTO.Config;
 using DNSUpdater.Services.Base;
 using DNSUpdater.Utils;
-using Newtonsoft.Json;
+using DNSUpdater.Utils.Helpers;
 
 namespace DNSUpdater.Services.Updater
 {
@@ -30,21 +30,11 @@ namespace DNSUpdater.Services.Updater
 
                     try
                     {
-                        if (configModel.Properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_HTTP_VERB).ToLower().Equals(BusinessConfig.HTTP_GET.ToLower()))
-                        {
-                            updateResponse = await httpService.GetAsync(configModel.Properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_SERVICEURL));
-                            configModel.IP = configModel.Response.IP;
-                            configModel.Response.Message = BusinessConfig.SUBMITED(updateResponse);
-                        }
-                        else
-                        {
-                            List<string> ignoredParams = new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB, BusinessConfig.PROPERTY_CONTENT_TYPE };
-                            List<PropertiesDTO> data = configModel.Properties.Where(p => !ignoredParams.Any(p2 => p2.ToLower() == p.Name.ToLower())).ToList();
+                        List<string> ignoredParams = new List<string>() { BusinessConfig.PROPERTY_SERVICEURL, BusinessConfig.PROPERTY_HTTP_VERB, BusinessConfig.PROPERTY_CONTENT_TYPE, BusinessConfig.PROPERTY_REQUEST_HEADERS };
 
-                            updateResponse = await httpService.SendAsync(configModel.Properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_SERVICEURL), configModel.Properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_HTTP_VERB), JsonConvert.SerializeObject(data), configModel.Properties.GetPropertyeValueByName(BusinessConfig.PROPERTY_CONTENT_TYPE));
-                            configModel.IP = configModel.Response.IP;
-                            configModel.Response.Message = BusinessConfig.SUBMITED(updateResponse);
-                        }
+                        updateResponse = await FunctionHelper.MakeRequestByListOfProperties(configModel.Properties, ignoredParams, httpService);
+                        configModel.IP = configModel.Response.IP;
+                        configModel.Response.Message = BusinessConfig.SUBMITED(updateResponse);
                     }
                     catch (Exception ex)
                     {
