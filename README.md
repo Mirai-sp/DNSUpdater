@@ -32,8 +32,12 @@ For the application to work, a configuration file **config.json** must exist in 
             "Enabled" : true,
             "Properties" : [
                 {
-                    "Name" : "GETURL",
+                    "Name" : "ServiceUrl",
                     "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                },
+                {
+                    "Name" : "HTTPVerb",
+                    "Value" : "Get"
                 },
                 {
                     "Name" : "PATHPROPERTIE",
@@ -59,7 +63,7 @@ For the application to work, a configuration file **config.json** must exist in 
     "Properties" : [
         {
             "Name" : "ServiceUrl",
-            "Value" : "http://ddnsUpdaterEndpointThatReturn.com"
+            "Value" : "http://ddnsUpdaterEndpointThatHavePostFields.com"
         },
 	    {
             "Name" : "HTTPVerb",
@@ -84,8 +88,12 @@ For the application to work, a configuration file **config.json** must exist in 
             "Enabled" : true,
             "Properties" : [
                 {
-                    "Name" : "GETURL",
+                    "Name" : "ServiceUrl",
                     "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                },
+                {
+                    "Name" : "HTTPVerb",
+                    "Value" : "Get"
                 },
                 {
                     "Name" : "PATHPROPERTIE",
@@ -106,8 +114,103 @@ For the application to work, a configuration file **config.json** must exist in 
             "Enabled" : true,
             "Properties" : [
                 {
-                    "Name" : "GETURL",
-                    "Value" : "http://serviceThatRetrieveWanIP2IfFirstFails"
+                    "Name" : "ServiceUrl",
+                    "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                },
+                {
+                    "Name" : "HTTPVerb",
+                    "Value" : "Get"
+                },
+                {
+                    "Name" : "RETRY",
+                    "Value" : 3
+                },
+                {
+                    "Name" : "DELAY",
+                    "Value" : 3000
+                }
+           ]
+        }
+   ]
+},
+{
+    "ServiceName" : "UpdaterDDNSByHttpRequest",
+    "DomainName" : "myAnotherddnsdomain.com",
+    "Enabled" : true,
+    "Interval" : 20000,
+    "Properties" : [
+        {
+            "Name" : "ServiceUrl",
+            "Value" : "http://ddnsUpdaterEndpointThatPostFieldsAndHeaders.com"
+        },
+	    {
+            "Name" : "HTTPVerb",
+            "Value" : "Post"
+        },
+	    {
+            "Name" : "CustomField1",
+            "Value" : "CustomValue1"
+        },
+	    {
+            "Name" : "CustomField2",
+            "Value" : "CustomField2"
+        },
+	    {
+            "Name" : "ContentType",
+            "Value" : "application/json"
+        },
+	    {
+            "Name" : "RequestHeaders",
+            "Value" : [
+                {
+                    "Name" : "HeaderAttribute1",
+                    "Value" : "HeaderValue1"
+                },
+                {
+                    "Name" : "HeaderAttribute2",
+                    "Value" : "HeaderValue2"
+                }
+            ]
+        }
+    ],
+    "WorkStrategy" : [
+        {
+            "StrategyName" : "StrategyECHO_IP",
+            "Enabled" : true,
+            "Properties" : [
+                {
+                    "Name" : "ServiceUrl",
+                    "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                },
+                {
+                    "Name" : "HTTPVerb",
+                    "Value" : "Get"
+                },
+                {
+                    "Name" : "PATHPROPERTIE",
+                    "Value" : "object.myIPPropertie"
+                },
+                {
+                    "Name" : "RETRY",
+                    "Value" : 3
+                },
+                {
+                    "Name" : "DELAY",
+                    "Value" : 3000
+                },
+           ]
+        },
+        {
+            "StrategyName" : "StrategyECHO_IP",
+            "Enabled" : true,
+            "Properties" : [
+                {
+                    "Name" : "ServiceUrl",
+                    "Value" : "http://serviceThatRetrieveWanIPThatReturnAJsonObject"
+                },
+                {
+                    "Name" : "HTTPVerb",
+                    "Value" : "Get"
                 },
                 {
                     "Name" : "RETRY",
@@ -144,6 +247,7 @@ If you want to host your own service that returns an IP address, you can create 
 ## Changelog
 
 - v1.0 First public release
+- v1.0.1 Add support for providing headers in requests and support for other HTTPs verbs (Post, Delete, Put, Patch) in the "StrategyECHO_IP" strategy.
 
 
 ## TODO
