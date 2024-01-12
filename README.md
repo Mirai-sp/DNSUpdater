@@ -3,6 +3,8 @@
 DNSUpdater is an application that updates your IP address in DDNS services.
 When configuring strategies to obtain the WAN IP address, if successful, the recovered address will be submitted for update.
 
+The application has support for configuring different strategies in an update service and in case of failure, the next strategy is executed and so on until the execution is successful. In case of general failure, the retry is started from the beginning respecting the configuration retry and execution delay.
+
 The application is fully customizable and allows you to implement new strategy classes as needed.
 
 ## Config Model
